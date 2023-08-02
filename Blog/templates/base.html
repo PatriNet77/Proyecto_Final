@@ -1,0 +1,47 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es-ar">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %} Soy Burro {% endblock title %}</title>
+</head>
+<body>
+    <header>
+        <a class="flex-sm-fill text-sm-center nav-link active" href="#">
+        <img src="{% static 'img/ia_top.jpg' %}" style="max-width: 300px; margin: 30px;">
+    </a>
+    </header>
+    <nav class="nav nav-pills flex-column flex-sm-row">
+        <a class="flex-sm-fill text-sm-center nav-link active" href="{% url 'index' %}">Inicio</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'apps.posts:posts' %}">Posts</a>
+        <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'apps.contacto:contacto' %}">Contacto</a>
+        <a class="flex-sm-fill text-sm-center nav-link disabled" href="{% url 'apps.usuario:registrar' %}" tabindex="-1" aria-disabled="true">Registrarse</a>
+
+        <div>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Inicio</a></li>
+                <li><a href="#">Acerca de nosotros</a></li>
+                <li><a href="{% url 'apps.posts:posts' %}">Posts</a></li>
+                <li><a href="{% url 'apps.contacto:contacto' %}">Contacto</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'apps.usuario:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'apps.usuario:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</body>
+{% block contenido %}
+
+{% endblock %} 
+
+<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
+    <div class="container text-center">
+        <small>Copyright &copy; COM8 "Super Compas"</small>
+    </div>
+</footer>
+
+</html>

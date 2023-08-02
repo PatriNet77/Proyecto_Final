@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<center>
+<div class="container-fluid" style="margin: 300px;">
+    <h1>Eliminar Post</h1>
+    <p>¿Estás seguro? ¿Seguro, segurísimo de que quieres eliminar este Post? "{{ post.titulo }}"</p>
+    <p>¿No te vas a arrepentir ni un tantito? Como cuando dejaste a tu ex.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="reset" value="Cacelar" class="btn btn-secondary">
+        <input type="submit" value="Eliminar" class="btn btn-primary">        
+    </form>
+</div>
+</center>
+
+{% endblock %}
