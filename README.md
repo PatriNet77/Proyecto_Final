@@ -1,12 +1,11 @@
 # Proyecto_Final
 
-### Install MySQL Server
-```
-https://dev.mysql.com/downloads/installer/
-``` 
+#MySQL Server
 
-### requeriments.txt
-```
+https://dev.mysql.com/downloads/installer/
+
+#requirements.txt
+
 asgiref==3.7.2
 distlib==0.3.7
 Django==4.2.3
@@ -16,53 +15,16 @@ platformdirs==3.9.1
 sqlparse==0.4.4
 tzdata==2023.3
 virtualenv==20.24.2
-...
-### Migrate dependencies
-```
+
+#Migración
+python manage.py makemigrations
 python manage.py migrate
-``` 
 
-### Run Django server
-```
+#Poniendo en marcha el servidor
 python manage.py runserver
-``` 
 
-### Example - Project structure 
-```
-Proyecto_Final/        (1) <--- Carpeta contenedora del proyecto
-├── blog/      (2) <--- Carpeta Repositorio
-│ ├── venv/              (3) <--- Carpeta del entorno - Ignorada en el .gitignore
-│ ├── myproject/        (4) <--- Carpeta del proyecto
-│ │ ├── myproject/
-│ │ │ ├── __pycache__/
-│ │ │ ├── __init__.py
-│ │ │ ├── asgi.py
-│ │ │ ├── settings.py
-│ │ │ ├── urls.py
-│ │ │ ├── wsgi.py
-│ │ │ └── ...
-│ │ ├── myapp/          (5) <--- Carpeta de la aplicacion
-│ │ │ ├── __pycache__/
-│ │ │ ├── migrations/
-│ │ │ ├── __init__.py
-│ │ │ ├── admin.py
-│ │ │ ├── apps.py
-│ │ │ ├── models.py
-│ │ │ ├── tests.py
-│ │ │ ├── urls.py
-│ │ │ ├── views.py
-│ │ │ └── ...
-│ │ ├── manage.py       (6) <--- Archivo manage.py
-│ │ └── ...
-│ ├── .gitignore
-│ ├── README.md
-│ ├── requeriments.txt  (7) <--- Archivo requeriments.txt - Ver si lo quieren ignorar en el .gitignore
-| └── ...
-└── ...
-```
+#Comandos Git
 
-### Used commands
-```
 → En carpeta contenedora del proyecto
 Para ejecutar comandos de git(clonar)
 - git clone url_del_repo
