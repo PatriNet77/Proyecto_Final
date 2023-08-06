@@ -5,16 +5,24 @@
 {% block contenido %}
 
 <center>
-    <div class="content-fluid" style="margin: 30px;">
-        <a id="boton_post" href= "{% url 'apps.posts:categoria_crear' %}?next={% url 'apps.posts:post_modificar' pk=object.id %}">Crear nueva categoria</a>
+{% if request.user == posts.usuario and user.is_superuser or request.user == posts.usuario and request.user|has_group:"Colaborador" %}
+    <div class="content-fluid" style="margin: 20px;">
+        <div class="content-fluid" style="margin: 30px;">
+            <a id="boton_post" href= "{% url 'apps.posts:categoria_crear' %}?next={% url 'apps.posts:post_crear' pk=object.id %}">Crear nueva categoria</a>
+        </div>
+    </div>
     <br>
-    <h1>Modificar post</h1>
+    <h1>Crear post</h1>
     <form method= "POST" enctype="multipart/form.data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Guardar cambios">
     <form>
+{% else %}
+    <div class="conteiner" style="margin: 200px;">
+        <h1>Solo usuarios registrados pueden tener acceso</h1>
     </div>
+{% endif %}
 </center>
 
 {% endblock %} 

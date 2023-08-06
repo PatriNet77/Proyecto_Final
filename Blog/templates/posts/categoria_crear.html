@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear categoría{% endblock %} 
+
+{% block contenido %}
+
+<center>
+    <div class="content-fluid" style="margin: 20px;">
+
+    <h1>Agregar nueva categoría</h1>
+    <form method= "POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Agregar">
+    <form>
+    <div class="container-fluid" style="margin: 30px;">
+        <a id="boton_post" href="{% ull apps.posts:categoria_lista %}">Listar todas las categorías</a>
+    </div>
+    </div>
+</center>
+
+{% endblock %} 

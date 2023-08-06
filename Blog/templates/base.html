@@ -1,4 +1,5 @@
 {% load static %}
+{% load colaborador_tag %}
 
 <!doctype html>
 <html lang="es-ar">
@@ -10,7 +11,7 @@
 <body>
     <header>
         <a class="flex-sm-fill text-sm-center nav-link active" href="#">
-        <img src="{% static 'img/ia_top.jpg' %}" style="max-width: 300px; margin: 30px;">
+        <img src="{% static 'img/ia_top.jpg' %}" style="max-width: 300px; margin: 10px;">
     </a>
     </header>
     <nav class="nav nav-pills flex-column flex-sm-row">
@@ -18,7 +19,6 @@
         <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'apps.posts:posts' %}">Posts</a>
         <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'apps.contacto:contacto' %}">Contacto</a>
         <a class="flex-sm-fill text-sm-center nav-link disabled" href="{% url 'apps.usuario:registrar' %}" tabindex="-1" aria-disabled="true">Registrarse</a>
-
         <div>
             <ul class="nav-links">
                 <li><a href="{% url 'index' %}">Inicio</a></li>
@@ -26,10 +26,33 @@
                 <li><a href="{% url 'apps.posts:posts' %}">Posts</a></li>
                 <li><a href="{% url 'apps.contacto:contacto' %}">Contacto</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'apps.usuario:logout' %}">Logout</a></li>
-                {% else %}
+                    <li><a href="{% url 'apps.usuario:logout' %}">{{ user.username }}: Logout</a></li>
+                    <div class="dropdown-content">
+                        <table>
+                            <tr>
+                                {% if request.user == posts.usuario and user.is_superuser or request.user == posts.usuario and request.user|has_group:"Colaborador" %}
+                                <td><a ref="apps.usuario:usuario_lista">Lista de usuarios</a></td>
+                            </tr>
+                            <tr>
+                                <td><a ref="#">Lista de categorías</a></td>
+                            </tr>
+                            <tr>
+                                <td><a ref="#">Lista de posts</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% else %}
                     <li><a href="{% url 'apps.usuario:login' %}">Login</a></li>
                 {% endif %}
+                <tr>
+                    <td><a ref="#">Lista de categorías</a></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
             </ul>
         </div>
     </nav>

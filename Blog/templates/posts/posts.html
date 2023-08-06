@@ -1,58 +1,46 @@
 {% extends 'base.html' %} 
 {% load  static %}
+{% load colaborador_tags %}
 
-{% block title %} Todos los post {% endblock title %}
+{% block title %} Posteos de Burros {% endblock %}
 
 {% block contenido %}
 
 <h1>Solo para Burros, como yo.</h1>
 <h3>¿Vos ya sabés?... Andá pa´sha, bobo.</h3>
 <br>
-
-<h2>Ordenar por:</h2>
-<ul>
-  <a id= "boton_post" href="{% url 'apps.posts:posts' %}?orden=reciente">Mas recientes</a>
-  <a id= "boton_post" href="{% url 'apps.posts:posts' %}?orden=antiguo">Mas antiguo</a>
-  <a id= "boton_post" href="{% url 'apps.posts:posts' %}?orden=alfabeticoA-Z">Alfabetico A-Z</a>
-  <a id= "boton_post" href="{% url 'apps.posts:posts' %}?orden=alfabeticoZ-A">Alfabetico Z-A</a>
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Categorías
-    </button>
-    <ul class="dropdown-menu">
-
-      {% for cat in categoria %}
-        <li><a class="dropdown-item" href="?id={{ cat.pk }}"> {{cat.nombre}} </a></li>
-      {% endfor %}
-
-    </ul>
-  </div>
-</ul>
-
-  <section class="post-list">
-    <div class="content">
-
-      {% for i in posts %}
-      <article class="post">
-
-        <div class="post-header">
-          <div class="post-img">
-            <img width="100%" height="200px" style="object-fit: cover" src="{{ i.imagen.url }}" alt=""/> 
-          </div>
-        </div>
-
-        <div class="post-body">
-
-          <span>{{ i.fecha }}</span>
-          <h2>{{ i.titulo }}</h2>
-          <h3>Por {{i.usuario}}</h3>
-          <p>{{ i.texto|truncatewords:30 }}</p>
-          <a href="{% url 'apps.posts:post_individual' i.id %}" class="post-link">Leer Mas...</a>
-        </div>
-
-      </article>
-      {% endfor %}
+<center>
+<div class="container-fluid" style="margin=50px">
+{% if user.is_superuser or request.user|has_group:"Colaborador" %}
+    <div class="container-fluid" style="margin=30px">
+        <a id="boton_post" href="{% ull apps.posts:post_crear %}">Crear nuevo post</a>
     </div>
-  </section>
+    <h2>Ordenar por:</h2>
+    <ul>
+        <a id="boton_post" href="{% ull apps.posts:posts %}?orden=reciente">Recientes</a>
+        <a id="boton_post" href="{% ull apps.posts:posts %}?orden=antiguo">Más antiguos</a>
+        <a id="boton_post" href="{% ull apps.posts:posts %}?orden=alfabetico">Orden alfabético</a>
+    </ul>
+{% if object_list %}
 
+{% for post in posts %}
+
+<div class="post-body">
+    <span>{{ post.fecha }}</span>
+    <h2>{{ post.titulo }}</h2>
+    <h3>Por {{apps.usuario.profile.usuario}}</h3>
+    <p>{{ post.texto|truncatewords:30 }}</p>
+    <a href="posts/{{ post }}" class="post-link">Leer Mas... {{post.texto}} </a>
+</div>
+
+{% endfor %}
+
+{% else %}
+<h2>No hay registros. I´m sorry.</h2>
+
+{% endif %}
+
+<button href="{{ post_crear }}" type="button" class="btn btn-primary">Crear Post</button>
+</center>
 {% endblock %} 
+
