@@ -5,13 +5,14 @@ from django.db.models.functions import Lower
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Categoria, Comentario
-from .forms import ComentarioForm,CrearPostForm, NuevaCategoriaForm
+from .forms import ComentarioForm, CrearPostForm, NuevaCategoriaForm
 
 #404
 class NotFoundView(TemplateView):
     template_name = '404.html'
 
 #Post lista, individual, crear, modificar, eliminar
+#y consulta a la base de datos
 class PostListView(ListView):
     model = Post
     template_name = 'posts/posts.html'
@@ -43,7 +44,7 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'posts/post_individual.html'
-    context_object_name = 'posts'
+    context_object_name = 'post_individual'
     pk_url_kwarg = 'id'
     queryset = Post.objects.all()
     
@@ -57,7 +58,7 @@ class PostDetailView(DetailView):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             comentario = form.save(commit=False)
-            comentario.usuario = request.user
+            comentario.usuario = request.usuario
             comentario.posts_id = self.kwargs['id']
             comentario.save()
             return redirect('apps.posts:post_individual', id=self.kwargs['id'])
@@ -70,18 +71,26 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model= Post
     form_class = CrearPostForm
     template_name = 'posts/post_crear.html'
-    success_url = reverse_lazy('apps.post:posts')
+    success_url = reverse_lazy('apps.posts:posts')
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = CrearPostForm
     template_name = 'posts/post_modificar.html'
-    success_url = reverse_lazy('apps.post:posts')
+    success_url = reverse_lazy('apps.posts:posts')
 
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'posts/post_eliminar.html'
-    success_url = reverse_lazy('apps.post:posts')
+    success_url = reverse_lazy('apps.posts:posts')
+
+class PostPorCategoriaView(ListView):
+    model = Post
+    template_name = 'posts/post_por_categoria.html'
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        return Post.objects.filter(categoria_id=self.kwargs['pk'])
 
 #Categoría crear, listar, eliminar
 class CategoriaCreateView(LoginRequiredMixin, CreateView):
@@ -94,7 +103,7 @@ class CategoriaCreateView(LoginRequiredMixin, CreateView):
         if next_url:
             return next_url
         else:
-            return reverse_lazy('apps.post:post_crear')
+            return reverse_lazy('apps.posts:post_crear')
 
 class CategoriaListView(ListView):
     model = Categoria
@@ -104,7 +113,7 @@ class CategoriaListView(ListView):
 class CategoriaDeleteView(LoginRequiredMixin, DeleteView):
     model = Categoria
     template_name = 'posts/categoria_eliminar.html'
-    success_url = reverse_lazy('apps.post:categoria_lista')
+    success_url = reverse_lazy('apps.posts:categoria_lista')
 
 #Comentario crear, modificar, eliminar
 class ComentarioCreateView(LoginRequiredMixin, CreateView):
@@ -122,15 +131,16 @@ class ComentarioUpdateView(LoginRequiredMixin, UpdateView):
     model = Comentario
     form_class = ComentarioForm
     template_name = 'comentario/comentario_modificar.html'
+    
     def get_success_url(self):
         next_url = self.request.GET.get('next')
         if next_url:
             return next_url
         else:
-            return reverse('apps.post:post_individual', args=[self.object.posts.id])
+            return reverse('apps.posts:post_individual', args=[self.object.posts.id])
 
 class ComentarioDeleteView(LoginRequiredMixin, DeleteView):
     model = Comentario
     template_name = 'comentario/comentario_eliminar.html'
     def get_success_url(self):
-        return reverse('apps.post:post_individual', args=[self.object.posts.id])
+        return reverse('apps.posts:post_individual', args=[self.object.posts.id])
